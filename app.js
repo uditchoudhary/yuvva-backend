@@ -38,6 +38,24 @@ app.get("/organics", (req, res) => {
     });
 });
 
+app.get("/:category/all", (req, res) => {
+  let category = req.params.category;
+  let query = {};
+  if (category === "probiotics") {
+    query = { productCategory_name: "Probiotics" };
+  } else if (category === "organics") {
+    query = { productCategory_name: "Organics" };
+  } else {
+    res.status(404).send("Category Not Found");
+  }
+  db.collection("items")
+    .find(query)
+    .toArray((err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+});
+
 app.get("/items/", (req, res) => {
   let query = {};
   let itemId = Number(req.query.item);
