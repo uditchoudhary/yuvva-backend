@@ -4,9 +4,12 @@ const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 const dotenv = require("dotenv");
 dotenv.config();
+const cors = require("cors");
+const { use } = require("express/lib/application");
 let port = process.env.PORT || 8230;
 const mongoURL = process.env.mongoLiveUrl;
 
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Welcome to express");
 });
@@ -46,7 +49,7 @@ app.get("/:category/all", (req, res) => {
   } else if (category === "organics") {
     query = { productCategory_name: "Organics" };
   } else {
-    res.status(404).send("Category Not Found");
+    return res.status(404).send("Category Not Found");
   }
   db.collection("items")
     .find(query)
