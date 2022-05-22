@@ -24,21 +24,50 @@ app.get("/categories", (req, res) => {
 });
 
 app.get("/probiotics", (req, res) => {
-  db.collection("probioticsCategory")
-    .find()
+  console.log("Probiotics");
+  db.collection("productCategory")
+    .find({ category_name: "Probiotics" })
+    .toArray((err, result) => {
+      if (err) throw err;
+      console.log(result);
+      res.send(result);
+    });
+});
+
+app.get("/organics", (req, res) => {
+  db.collection("productCategory")
+    .find({ category_name: "Organics" })
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
     });
 });
 
-app.get("/organics", (req, res) => {
-  db.collection("organicsCategory")
-    .find()
+app.get("/items", (req, res) => {
+  let query = {};
+  let itemId = Number(req.query.item);
+  if (itemId) {
+    query = { item_id: itemId };
+  }
+  db.collection("items")
+    .find(query)
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
     });
+});
+
+app.get("/items/:itemid", (req, res) => {
+  let query = {};
+  let itemId = Number(req.params.itemid);
+  db.collection("items").findOne({ item_id: itemId }, (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+  // .toArray((err, result) => {
+  //   if (err) throw err;
+  //   res.send(result);
+  // });
 });
 
 // app.get("/:category/all", (req, res) => {
@@ -58,12 +87,12 @@ app.get("/organics", (req, res) => {
 //       res.send(result);
 //     });
 // });
-// return all products of category 
+// return all products of category
 app.get("/:category_id/all", (req, res) => {
   const categoryid = Number(req.params.category_id);
-   const query = {
-      category_id: categoryid,
-    };
+  const query = {
+    category_id: categoryid,
+  };
 
   db.collection("items")
     .find(query)
