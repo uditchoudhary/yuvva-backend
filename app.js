@@ -58,36 +58,13 @@ app.get("/items", (req, res) => {
 });
 
 app.get("/items/:itemid", (req, res) => {
-  let query = {};
   let itemId = Number(req.params.itemid);
   db.collection("items").findOne({ item_id: itemId }, (err, result) => {
     if (err) throw err;
     res.send(result);
   });
-  // .toArray((err, result) => {
-  //   if (err) throw err;
-  //   res.send(result);
-  // });
 });
 
-// app.get("/:category/all", (req, res) => {
-//   let category = req.params.category;
-//   let query = {};
-//   if (category === "probiotics") {
-//     query = { productCategory_name: "Probiotics" };
-//   } else if (category === "organics") {
-//     query = { productCategory_name: "Organics" };
-//   } else {
-//     return res.status(404).send("Category Not Found");
-//   }
-//   db.collection("items")
-//     .find(query)
-//     .toArray((err, result) => {
-//       if (err) throw err;
-//       res.send(result);
-//     });
-// });
-// return all products of category
 app.get("/:category_id/all", (req, res) => {
   const categoryid = Number(req.params.category_id);
   const query = {
