@@ -34,6 +34,17 @@ app.get("/probiotics", (req, res) => {
     });
 });
 
+app.get("/products/:productCategoryId", (req, res) => {
+  let productCategoryId = Number(req.params.productCategoryId);
+  const query = { productCategory_id: productCategoryId };
+  db.collection("items")
+    .find(query)
+    .toArray((err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+});
+
 app.get("/organics", (req, res) => {
   db.collection("productCategory")
     .find({ category_name: "Organics" })
